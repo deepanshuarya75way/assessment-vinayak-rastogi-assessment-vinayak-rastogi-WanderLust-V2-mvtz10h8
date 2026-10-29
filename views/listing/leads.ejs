@@ -1,0 +1,38 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  .no-border{
+    border: none !important;
+  }
+</style>
+
+<div class = "container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card no-border">
+        <div class="card-body">
+          <h3 class="card-title mb-3">Can't find your ideal Listing</h3>
+          <p>Tell us what you are looing for?</p>
+          <form action="/leads" method="post">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input class="form-control" id="name" name="name" type="text" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input class="form-control" id="email" name="email" type="email">
+            </div>
+            <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input class="form-control" id="location"  name="location" type="text">
+            </div>
+            <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input class="form-control" id="country" name="country" type="text">
+            </div>
+            <button type="submit" class="btn btn-primary">Notify Me</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

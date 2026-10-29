@@ -1,0 +1,82 @@
+<style>
+  .navbar-collapse{
+    
+    background-color: white;
+    border-radius: 16px;
+    padding-left: 1rem;
+  }
+  .search-btn{
+    border: 1px solid ;
+    background-color: #fe424d;
+    color: #f2f2f2;
+    border-radius: 25px;
+    padding: 0rem 1rem 0rem 1rem;
+  }
+
+  .search-btn:hover{
+    border: 1px solid #212529;
+    background-color: #fe424d;
+    color: #f2f2f2;
+    
+  }
+  .search-btn i{
+    display: inline;
+    margin-right: 0.5rem;
+  }
+
+  .search-input{
+    border-radius: 25px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    cursor:text;
+    font-size: 1rem;
+
+  }
+</style>
+
+
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-duotone fa-solid fa-map-pin"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search" method="get" action="/listings">
+          <% if (typeof minPrice !== "undefined" && minPrice !== ""){ %>
+            <input type="hidden" name="minPrice" value="<%= minPrice %>">
+          <% } %>
+
+          <% if (typeof maxPrice !== "undefined" && maxPrice !== "") { %>
+            <input type="hidden" name="maxPrice" value="<%= maxPrice %>">
+          <% } %>
+
+          <% if (typeof selectedCategory !== "undefined" && selectedCategory) { %>
+  <input type="hidden" name="category" value="<%= selectedCategory %>">
+<% } %>
+
+          <% if (typeof sort !== "undefined" && sort) { %>
+            <input type="hidden" name="sort" value="<%= sort %>">
+          <% } %>
+          <input class="form-control me-2 search-input" name="search" type="search" placeholder="Search destinations" value="<%= typeof search !== 'undefined'? search: '' %>"/>
+          <button class="btn hover-lift search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        </form>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+        <a class="nav-link" href="/leads/lead-form">Get Notified</a>
+
+        <% if(!currUser) {%>
+        <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+        <a class="nav-link" href="/login"><b>Log In</b></a>
+        <% } %>
+        <% if(currUser) {%>
+        <a class="nav-link" href="/logout"><b>Log Out</b></a>
+        <% } %>
+      </div>      
+    </div>
+  </div>
+</nav>
