@@ -1,25 +1,23 @@
-<% layout("/layouts/boilerplate)%>
-
   <div>
-    <h2></h2>
+    <h2>Price Calculator</h2>
     <form action="/listings/<%= listing._id %>/quote" method="get">
       <label for="">
         CheckIN
       </label>
 
-      <input type="date" name="checkIn" required>
+      <input type="date" class="form-control" name="checkIn" required>
       <label for="">
         CheckOut
       </label>
 
-      <input type="date" name="checkOut" required>
+      <input type="date" class="form-control"  name="checkOut" required>
       <label
         for="">
         Geusts
       </label>
         
-        <input type="number" name="geusts" min="1" value="1">
-        <button class="btn btn-primary">Calculate</button>
+        <input type="number" class="form-control" name="geusts" min="1" value="1">
+        <button type="submit" class="btn btn-primary">Calculate</button>
       </form>
 
       <% if(quote) { %>
@@ -28,11 +26,20 @@
           Price BreakDown
         </h4>
 
-        <% quote.breakdown.forEach(item=>{%>
-          <p><%=item.finalPrice%>
-          <%= item.appliedRule?`(${item.appliedRule.name})`:""%></p>
-        <%})%>
+        <p>Nights: <%= quote.nights %></p>
+        <p>Base total: Rs. <%= quote.baseTotal %></p>
 
+        <% quote.breakdown.forEach(function(item){%>
+          <div>
+            <span><%= item.date %></span>
+            <span><%= item.finalPrice %></span>
+
+            <% if(item.appliedRule){%>
+              <small>(<%=item.appliedRule.name%></small>
+              <%}%>
+          </div>
+        <% })%>
+        
         <h3>Total: Rs. <%=quote.total%></h3>
       <%}%>
   </div>
