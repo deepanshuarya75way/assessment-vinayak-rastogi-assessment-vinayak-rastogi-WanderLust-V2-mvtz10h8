@@ -144,7 +144,7 @@ export const update = async (req, res)=>{
 };
 
 export const toggle = async (req, res)=>{
-  const {id, ruleId}= req.paams;
+  const {id, ruleId}= req.params;
 
   const listing = await findOwnedListing(id, req.user._id);
 
