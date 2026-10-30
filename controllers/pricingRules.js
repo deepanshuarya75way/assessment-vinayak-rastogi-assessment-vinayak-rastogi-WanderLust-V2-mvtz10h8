@@ -17,15 +17,14 @@ const findOwnedListing = async (listingId, userId) => {
 };
 
 const getRuleData = (body) => {
-  const { name, adjustmentType, value, priority} = body;
 
   const conditions = body.conditions || {};
 
   const nullableNumber = (val) =>
-    val === "" || val === undefined || val === null ? null : Number(val);
+    val === "" || val === null ? null : Number(val);
 
   return {
-    name, adjustmentType, value: Number(value), priority: priority === "" || priority === undefined ? 0 : Number(priority),
+    name:body.name, adjustmentType:body.adjustmentType, value: Number(body.value), priority:Number(body.priority||0),
 
     conditions: {
       startDate: conditions?.startDate || null,
@@ -73,6 +72,7 @@ export const create = async (req, res) => {
   const { id } = req.params;
   const listing = await findOwnedListing(id, req.user._id);
 
+  console.log(req.body);
   const ruleData = getRuleData(req.body);
 
   const pricingRule = new PricingRule({
@@ -126,17 +126,21 @@ export const update = async (req, res)=>{
     changedAt:new Date(),
   });
 
+  console.log(req.body);
+
   const ruleData = getRuleData(req.body);
 
   rules.name = ruleData.name;
   rules.adjustmentType = ruleData.adjustmentType;
   rules.value = ruleData.value;
-  rules.conditions = ruleData.conditions;
+  rules.set("conditions", ruleData.conditions);
   rules.priority = ruleData.priority;
   
   rules.version +=1;
-
+  rules.markModified("conditions")
   await rules.save();
+
+  console.log("saved cond", rules.conditions);
 
   req.flash("success", "Pricing rules updated");
 

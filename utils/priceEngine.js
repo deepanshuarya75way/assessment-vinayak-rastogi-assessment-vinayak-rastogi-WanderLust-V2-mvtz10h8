@@ -126,7 +126,6 @@ const startOfDayUTC = (date) =>Date.UTC(date.getUTCFullYear(), date.getUTCMonth(
       }));
 
       const item = {
-
         date: currentDate.toISOString().slice(0, 10),
         basePrice,
         appliedRule: null,
@@ -134,6 +133,7 @@ const startOfDayUTC = (date) =>Date.UTC(date.getUTCFullYear(), date.getUTCMonth(
         finalPrice: basePrice,
       };
 
+    
       if (matchingRule) {
         const adjustment = calculateAdjustments(basePrice, matchingRule);
 
@@ -150,6 +150,8 @@ const startOfDayUTC = (date) =>Date.UTC(date.getUTCFullYear(), date.getUTCMonth(
         item.adjustment = Number((finalPrice - basePrice).toFixed(2));
         item.finalPrice = Number(finalPrice.toFixed(2));
       }
+
+      
 
       total += item.finalPrice;
       breakdown.push(item);

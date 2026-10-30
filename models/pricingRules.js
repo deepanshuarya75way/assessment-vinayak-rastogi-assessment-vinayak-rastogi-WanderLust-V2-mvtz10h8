@@ -70,6 +70,10 @@ const ruleConfigSchema = new Schema({
     type:Boolean,
     default:true,
   },
+  conditions:{
+    type:conditionSchema,
+    default:()=>({})
+  }
 },
 {_id:false});
 

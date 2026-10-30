@@ -36,10 +36,12 @@
 
             <% if(item.appliedRule){%>
               <small>(<%=item.appliedRule.name%></small>
-              <%}%>
+              <%}else {%>
+        (No pricing changes)
+        <%}%>
           </div>
         <% })%>
         
         <h3>Total: Rs. <%=quote.total%></h3>
-      <%}%>
+      <%} %>
   </div>
