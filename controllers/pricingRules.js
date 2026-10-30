@@ -167,11 +167,11 @@ export const toggle = async (req, res)=>{
 
 
 export const deleteRule = async (req, res)=>{
-   const {id, ruleId}= req.paams;
+   const {id, ruleId}= req.params;
 
   const listing = await findOwnedListing(id, req.user._id);
 
-  await PricingRules.findOneAndDelete({ _id: ruleId, listing: listing._id });
+  await PricingRule.findOneAndDelete({ _id: ruleId, listing: listing._id });
 
 
     req.flash("success", "Pricing rule deleted.");
