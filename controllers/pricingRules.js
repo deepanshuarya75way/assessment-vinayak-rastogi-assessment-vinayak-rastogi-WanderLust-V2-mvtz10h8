@@ -17,7 +17,9 @@ const findOwnedListing = async (listingId, userId) => {
 };
 
 const getRuleData = (body) => {
-  const { name, adjustmentType, value, priority, conditions = {} } = body;
+  const { name, adjustmentType, value, priority} = body;
+
+  const conditions = body.conditions || {};
 
   const nullableNumber = (val) =>
     val === "" || val === undefined || val === null ? null : Number(val);
@@ -26,8 +28,8 @@ const getRuleData = (body) => {
     name, adjustmentType, value: Number(value), priority: priority === "" || priority === undefined ? 0 : Number(priority),
 
     conditions: {
-      startDate: conditions.startDate || null,
-      endDate: conditions.endDate || null,
+      startDate: conditions?.startDate || null,
+      endDate: conditions?.endDate || null,
 
       minNights: nullableNumber(conditions.minNights),
       maxNights: nullableNumber(conditions.maxNights),
@@ -46,9 +48,9 @@ export const index = async (req, res) => {
 
   const listing = await findOwnedListing(id, req.user._id);
 
-  const pricingRules = await PricingRule.find({ listing: listing._id }).sort({ priority: -1 });
+  const rules = await PricingRule.find({ listing: listing._id }).sort({ priority: -1 });
 
-  res.render("pricing/index.ejs", { listing, pricingRules });
+  res.render("pricing/index.ejs", { listing, rules });
 };
 
 export const newRule = async (req, res) => {
@@ -56,7 +58,15 @@ export const newRule = async (req, res) => {
 
   const listing = await findOwnedListing(id, req.user._id);
 
-  res.render("pricing/new.ejs", { listing });
+  const rule = {
+    name:"",
+    adjustmentType:"pecentageDiscount",
+    value:0,
+    priority:0,
+    conditions:{}
+  }
+
+  res.render("pricing/new.ejs", { listing, rule });
 };
 
 export const create = async (req, res) => {
@@ -73,60 +83,60 @@ export const create = async (req, res) => {
   await pricingRule.save();
 
   req.flash("success", "Pricing rule created succesfully");
-  res.redirect(`listing/${id}/pricing-rules`);
+  res.redirect(`/listings/${listing._id}/pricing-rules`);
 }
 
 export const edit = async (req, res) => {
   const { id, ruleId } = req.params;
   const listing = await findOwnedListing(id, req.user._id);
 
-  const pricingRule = await PricingRule.findOne({ _id: ruleId, listing: listing._id });
+  const rule = await PricingRule.findOne({ _id: ruleId, listing: listing._id });
 
-  if (!pricingRule) {
+  if (!rule) {
     req.flash("error", "Pricing rule not found.");
     return res.redirect(`/listings.${id}/pricing-rules`);
   }
 
-  res.render("pricing/edit.ejs", { listing, pricingRule });
+  res.render("pricing/edit.ejs", { listing, rule });
 };
 
 export const update = async (req, res)=>{
   const { id, ruleId } = req.params;
   const listing = await findOwnedListing(id, req.user._id);
 
-  const pricingRule = await PricingRule.findOne({ _id: ruleId, listing: listing._id });
+  const rules = await PricingRule.findOne({ _id: ruleId, listing: listing._id });
 
-  if (!pricingRule) {
+  if (!rules) {
     req.flash("error", "Pricing rule not found.");
     return res.redirect(`/listings.${id}/pricing-rules`);
   }
 
   const oldConfig = {
-    name:pricingRule.name,
-    adjustmentType:pricingRule.adjustmentType,
-    value:pricingRule.value,
-    conditions:pricingRule.conditions,
-    priority:pricingRule.priority,
-    isActive:pricingRule.isActive
+    name:rules.name,
+    adjustmentType:rules.adjustmentType,
+    value:rules.value,
+    conditions:rules.conditions,
+    priority:rules.priority,
+    isActive:rules.isActive
   };
 
-  pricingRule.history.push({
-    version:pricingRule.version,
+  rules.history.push({
+    version:rules.version,
     config:oldConfig,
     changedAt:new Date(),
   });
 
   const ruleData = getRuleData(req.body);
 
-  pricingRule.name = ruleData.name;
-  pricingRule.adjustmentType = ruleData.adjustmentType;
-  pricingRule.value = ruleData.value;
-  pricingRule.conditions = ruleData.conditions;
-  pricingRule.priority = ruleData.priority;
+  rules.name = ruleData.name;
+  rules.adjustmentType = ruleData.adjustmentType;
+  rules.value = ruleData.value;
+  rules.conditions = ruleData.conditions;
+  rules.priority = ruleData.priority;
   
-  pricingRule.version +=1;
+  rules.version +=1;
 
-  await pricingRule.save();
+  await rules.save();
 
   req.flash("success", "Pricing rules updated");
 
@@ -136,21 +146,21 @@ export const update = async (req, res)=>{
 export const toggle = async (req, res)=>{
   const {id, ruleId}= req.paams;
 
-  const lising = await findOwnedListing(id, req.user._id);
+  const listing = await findOwnedListing(id, req.user._id);
 
-  const pricingRule = await PricingRule.findOne({ _id: ruleId, listing: listing._id });
+  const rules = await PricingRule.findOne({ _id: ruleId, listing: listing._id });
 
 
- if (!pricingRule) {
+ if (!rules) {
     req.flash("error", "Pricing rule not found.");
     return res.redirect(`/listings.${id}/pricing-rules`);
   }
 
-  pricingRule.isActive = !pricingRule.isActive;
+  rules.isActive = !rules.isActive;
 
-  await pricingRule.save();
+  await rules.save();
 
-  req.flash("success", `Pricing rules ${pricingRule.isActive? "activated":"deactivated"} succesfully!`);
+  req.flash("success", `Pricing rules ${rules.isActive? "activated":"deactivated"} succesfully!`);
 
   res.redirect(`/listings/${id}/pricing-rules`);
 };
@@ -159,9 +169,9 @@ export const toggle = async (req, res)=>{
 export const deleteRule = async (req, res)=>{
    const {id, ruleId}= req.paams;
 
-  const lising = await findOwnedListing(id, req.user._id);
+  const listing = await findOwnedListing(id, req.user._id);
 
-  await PricingRule.findOneAndDelete({ _id: ruleId, listing: listing._id });
+  await PricingRules.findOneAndDelete({ _id: ruleId, listing: listing._id });
 
 
     req.flash("success", "Pricing rule deleted.");

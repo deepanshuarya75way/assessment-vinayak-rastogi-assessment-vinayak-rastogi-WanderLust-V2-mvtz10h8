@@ -33,6 +33,8 @@
         <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
             <button class="btn btn-dark offset-4">Delete</button>
         </form>
+
+    <a href="/listings/<%= listing._id %>/quote" class="btn btn-primary">Check Dynamic Price</a>
     </div>
     <hr class="col-8 offset-3">
     <% } %>

@@ -20,8 +20,8 @@
         <div class="mb-3">
           <label class="form-label">Adjustment Type</label>
           <select name="adjustmentType" class="form-select" required>
-            <option value="precentageIncrease">Precentage Increase</option>
-            <option value="precentageDiscount">Precentage Discount</option>
+            <option value="percentageIncrease">Percentage Increase</option>
+            <option value="percentageDiscount">Percentage Discount</option>
             <option value="fixedIncrese">Fixed Increse</option>
             <option value="fixedDiscount">Fixed Discount</option>
           </select>
@@ -64,19 +64,19 @@
           
           <div class="col-md-6 mb-3">
             <label class="form-label">Min Geusts</label>
-            <input type="date" min="1" name="conditions[minGeusts]" class="form-control">
+            <input type="number" min="1" name="conditions[minGeusts]" class="form-control">
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Max Geusts</label>
-            <input type="date" min="1" name="conditions[maxGeusts]" class="form-control">
+            <input type="number" min="1" name="conditions[maxGeusts]" class="form-control">
           </div>
          <div class="col-md-6 mb-3">
             <label class="form-label">Min Advance Days</label>
-            <input type="date" min="0" name="conditions[minAdvanceDays]" class="form-control">
+            <input type="number" min="0" name="conditions[minAdvanceDays]" class="form-control">
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Max Advance Days</label>
-            <input type="date" min="0" name="conditions[maxAdvanceDays]" class="form-control">
+            <input type="number" min="0" name="conditions[maxAdvanceDays]" class="form-control">
           </div>
         </div>
 

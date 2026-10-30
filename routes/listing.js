@@ -3,7 +3,7 @@ import wrapAsync from "../utils/wrapAsync.js";
 import Listing from "../models/listing.js";
 import Review from "../models/review.js";
 import {validateListing, isLoggedin, isOwner } from "../middleware.js";
-import {create, index, newRoute, showListing, edit, update, deleteRoute, createLead} from "../controllers/listings.js";
+import {create, index, newRoute, showListing, edit, update, deleteRoute, createLead, getQuote} from "../controllers/listings.js";
 import multer from "multer";
 import pricingRuleRouter from "./pricingRules.js";
 
@@ -29,6 +29,7 @@ router.use("/:id/pricing-rules", pricingRuleRouter);
 //new lead
 router.post("/:id/leads", wrapAsync(createLead));
 
+router.get("/:id/quote", wrapAsync(getQuote));
 
 //show / update / delete
 router

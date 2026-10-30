@@ -1,6 +1,7 @@
 import Listing from "../models/listing.js";
 import Lead from "../models/lead.js";
 import { matchLeads } from "../utils/matchLeads.js";
+import {calculateQuote} from "../utils/priceEngine.js"
 
 const category = [
   "Rooms",
@@ -211,4 +212,29 @@ const createLead = async (req, res)=>{
   return res.redirect(`listing/${id}`);
 }
 
-export { index, newRoute, create, showListing, edit, update, deleteRoute, createLead };
+const getQuote = async (req, res)=>{
+  const listing = await Listing.findById(req.params.id);
+
+  if(!listing){
+    req.flash("error", "Listing not found.");
+    return res.redirect("/listings");
+  }
+
+  let quote = null;
+  const {checkIn, checkOut, geusts} = req.query;
+
+  if(checkIn&&checkOut){
+    quote = await calculateQuote({
+      listingId:listing._id,
+      basePrice:listing.price,
+      checkIn,
+      checkOut,
+      geusts:Number(geusts)||1
+    });
+
+  }
+
+  res.render("pricing/quote.ejs", {listing, quote});
+}
+
+export { index, newRoute, create, showListing, edit, update, deleteRoute, createLead, getQuote };

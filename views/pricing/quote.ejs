@@ -1,0 +1,38 @@
+<% layout("/layouts/boilerplate)%>
+
+  <div>
+    <h2></h2>
+    <form action="/listings/<%= listing._id %>/quote" method="get">
+      <label for="">
+        CheckIN
+      </label>
+
+      <input type="date" name="checkIn" required>
+      <label for="">
+        CheckOut
+      </label>
+
+      <input type="date" name="checkOut" required>
+      <label
+        for="">
+        Geusts
+      </label>
+        
+        <input type="number" name="geusts" min="1" value="1">
+        <button class="btn btn-primary">Calculate</button>
+      </form>
+
+      <% if(quote) { %>
+        <hr/>
+        <h4>
+          Price BreakDown
+        </h4>
+
+        <% quote.breakdown.forEach(item=>{%>
+          <p><%=item.finalPrice%>
+          <%= item.appliedRule?`(${item.appliedRule.name})`:""%></p>
+        <%})%>
+
+        <h3>Total: Rs. <%=quote.total%></h3>
+      <%}%>
+  </div>

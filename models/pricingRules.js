@@ -113,7 +113,7 @@ pricingRuleSchema.pre("validate", function (){
     this.invalidate("value", "Percentage adjustment can't exceed 100");
   }
 
-  const c = this.conditions;
+  const c = this.conditions||{};
 
   if(c.startDate && c.endDate && c.startDate > c.endDate){
     this.invalidate("conditions.endDate", "End date must be after start date.");

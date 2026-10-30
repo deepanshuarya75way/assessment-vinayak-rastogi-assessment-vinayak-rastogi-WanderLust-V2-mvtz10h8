@@ -1,0 +1,24 @@
+<h2> Pricing Rules - <%= listing.title %></h2>
+
+<a href="/listings/<%= listing._id %>/pricing-rules/new">Add rules</a>
+
+<% if(rules.length===0){ %>
+  <p>No rules found</p>
+<%}%>
+
+<% rules.forEach(rule=>{ %>
+  <div>
+    <h4><%= rule.name %></h4>
+    <p>
+      <%= rule.adjustmentType %>-<%=rule.value%>
+    </p>
+    <p> Priority: <%= rule.priority %> </p>
+    <p>Status:<%= rule.isActive?"Active":"Inactive"%> </p>
+    <p>Version: <%= rule.version %></p>
+    <a class="btn btn-primary" href="/listings/<%=listing._id%>/pricing-rules/<%=rule._id%>/edit">Edit</a>
+    <form method="post" action="/listings/<%=listing._id%>/pricing-rules/<%=rule._id%>?_method=DELETE">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+  <hr>
+<%})%>
