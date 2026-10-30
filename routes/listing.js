@@ -5,6 +5,7 @@ import Review from "../models/review.js";
 import {validateListing, isLoggedin, isOwner } from "../middleware.js";
 import {create, index, newRoute, showListing, edit, update, deleteRoute, createLead} from "../controllers/listings.js";
 import multer from "multer";
+import pricingRuleRouter from "./pricingRules.js";
 
 
 const router = express.Router();
@@ -21,6 +22,9 @@ router
 
 //new route
 router.get("/new", isLoggedin, wrapAsync(newRoute))
+
+//Pricing rules
+router.use("/:id/pricing-rules", pricingRuleRouter);
 
 //new lead
 router.post("/:id/leads", wrapAsync(createLead));

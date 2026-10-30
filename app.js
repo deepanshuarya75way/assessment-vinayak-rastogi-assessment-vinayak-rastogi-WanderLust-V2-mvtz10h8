@@ -19,7 +19,7 @@ import leadRouter from "./routes/lead.js";
 
 
 const app = express();
-const port = 8080;
+const port = 5050;
 const dbURL = process.env.ATLAS_URL;
 
 
